@@ -1,1 +1,1 @@
-export * from "./appwriteClient";
+export * from "./supabaseClient";

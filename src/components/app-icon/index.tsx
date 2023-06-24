@@ -9,12 +9,14 @@ export const AppIcon: React.FC = () => {
       viewBox="0 0 16 16"
       fill="none"
     >
-      <path
-        fill="currentColor"
-        fill-rule="evenodd"
-        d="M11 1a1 1 0 1 0-2 0v5.5a.5.5 0 0 1-1 0V2a1 1 0 0 0-2 0v7.111c0 .253-.332.346-.463.13L3.895 6.553a1 1 0 1 0-1.79.894l3.171 6.342A4 4 0 0 0 8.854 16H9a5 5 0 0 0 5-5V3a1 1 0 1 0-2 0v3.5a.5.5 0 0 1-1 0z"
-        clip-rule="evenodd"
-      />
+      <g fill="currentColor">
+        <path d="M8 6a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" />
+        <path
+          fill-rule="evenodd"
+          d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.333 4a2.667 2.667 0 0 1 5.334 0v8a2.667 2.667 0 1 1-5.334 0z"
+          clip-rule="evenodd"
+        />
+      </g>
     </svg>
   );
 };

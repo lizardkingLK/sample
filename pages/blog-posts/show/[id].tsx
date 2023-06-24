@@ -1,19 +1,10 @@
-import { MantineShowInferencer } from "@refinedev/inferencer/mantine";
+import { MuiShowInferencer } from "@refinedev/inferencer/mui";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { authProvider } from "src/authProvider";
 
 export default function BlogPostShow() {
-  return (
-    <MantineShowInferencer
-      fieldTransformer={(field) => {
-        if (["$permissions", "$updatedAt", "$createdAt"].includes(field.key)) {
-          return false;
-        }
-        return field;
-      }}
-    />
-  );
+  return <MuiShowInferencer />;
 }
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {

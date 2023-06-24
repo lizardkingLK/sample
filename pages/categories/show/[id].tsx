@@ -1,10 +1,10 @@
-import { MantineShowInferencer } from "@refinedev/inferencer/mantine";
+import { MuiShowInferencer } from "@refinedev/inferencer/mui";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { authProvider } from "src/authProvider";
 
 export default function CategoryShow() {
-  return <MantineShowInferencer />;
+  return <MuiShowInferencer />;
 }
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {

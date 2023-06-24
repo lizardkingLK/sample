@@ -116,7 +116,6 @@
       "content": "Inhalt",
       "status": "Status",
       "created_at": "Erstellt am",
-      "updatedAt": "Aktualisiert am",
       "categoryId": "Kategorien"
     },
     "titles": {
@@ -131,7 +130,6 @@
     "fields": {
       "id": "Id",
       "title": "Titel",
-      "updatedAt": "Aktualisiert am",
       "created_at": "Erstellt am"
     },
     "titles": {

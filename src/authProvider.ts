@@ -1,100 +1,133 @@
-import { AppwriteException } from "@refinedev/appwrite";
 import { AuthBindings } from "@refinedev/core";
 import nookies from "nookies";
 
-import { account, appwriteClient, APPWRITE_TOKEN_KEY } from "./utility";
+import { supabaseClient } from "./utility";
 
 export const authProvider: AuthBindings = {
   login: async ({ email, password }) => {
-    try {
-      await account.createEmailSession(email, password);
-      const { jwt } = await account.createJWT();
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
+      email,
+      password,
+    });
 
-      if (jwt) {
-        nookies.set(null, APPWRITE_TOKEN_KEY, jwt, {
-          maxAge: 30 * 24 * 60 * 60,
-          path: "/",
-        });
-      }
+    if (error) {
+      return {
+        success: false,
+        error,
+      };
+    }
+
+    if (data?.session) {
+      nookies.set(null, "token", data.session.access_token, {
+        maxAge: 30 * 24 * 60 * 60,
+        path: "/",
+      });
 
       return {
         success: true,
         redirectTo: "/",
       };
-    } catch (error) {
-      const { type, message, code } = error as AppwriteException;
-      return {
-        success: false,
-        error: {
-          message,
-          name: `${code} - ${type}`,
-        },
-      };
     }
+
+    // for third-party login
+    return {
+      success: false,
+      error: {
+        name: "LoginError",
+        message: "Invalid username or password",
+      },
+    };
   },
   logout: async () => {
+    nookies.destroy(null, "token");
+    const { error } = await supabaseClient.auth.signOut();
+
+    if (error) {
+      return {
+        success: false,
+        error,
+      };
+    }
+
+    return {
+      success: true,
+      redirectTo: "/login",
+    };
+  },
+  register: async ({ email, password }) => {
     try {
-      await account.deleteSession("current");
+      const { data, error } = await supabaseClient.auth.signUp({
+        email,
+        password,
+      });
+
+      if (error) {
+        return {
+          success: false,
+          error,
+        };
+      }
+
+      if (data) {
+        return {
+          success: true,
+          redirectTo: "/",
+        };
+      }
     } catch (error: any) {
       return {
         success: false,
         error,
       };
     }
-    nookies.destroy(null, APPWRITE_TOKEN_KEY);
-    appwriteClient.setJWT("");
+
     return {
-      success: true,
-      redirectTo: "/login",
+      success: false,
+      error: {
+        message: "Register failed",
+        name: "Invalid email or password",
+      },
     };
   },
-  onError: async (error) => {
-    console.error(error);
-    return { error };
-  },
   check: async (ctx) => {
-    // for server side authentication
-    const cookies = nookies.get(ctx);
-    const appwriteJWT = cookies[APPWRITE_TOKEN_KEY];
-    if (appwriteJWT) {
-      appwriteClient.setJWT(appwriteJWT);
-    }
+    const { token } = nookies.get(ctx);
+    const { data } = await supabaseClient.auth.getUser(token);
+    const { user } = data;
 
-    try {
-      const session = await account.get();
-
-      if (session) {
-        return {
-          authenticated: true,
-        };
-      }
-    } catch (error: any) {
+    if (user) {
       return {
-        authenticated: false,
-        error: error,
-        logout: true,
-        redirectTo: "/login",
+        authenticated: true,
       };
     }
 
     return {
       authenticated: false,
-      error: {
-        message: "Check failed",
-        name: "Session not found",
-      },
-      logout: true,
       redirectTo: "/login",
     };
   },
-  getPermissions: async () => null,
-  getIdentity: async () => {
-    const user = await account.get();
+  getPermissions: async () => {
+    const user = await supabaseClient.auth.getUser();
 
     if (user) {
-      return user;
+      return user.data.user?.role;
     }
 
     return null;
+  },
+  getIdentity: async () => {
+    const { data } = await supabaseClient.auth.getUser();
+
+    if (data?.user) {
+      return {
+        ...data.user,
+        name: data.user.email,
+      };
+    }
+
+    return null;
+  },
+  onError: async (error) => {
+    console.error(error);
+    return { error };
   },
 };

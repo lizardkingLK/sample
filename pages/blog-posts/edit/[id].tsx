@@ -1,19 +1,10 @@
-import { MantineEditInferencer } from "@refinedev/inferencer/mantine";
+import { MuiEditInferencer } from "@refinedev/inferencer/mui";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { authProvider } from "src/authProvider";
 
 export default function BlogPostEdit() {
-  return (
-    <MantineEditInferencer
-      fieldTransformer={(field) => {
-        if (["$permissions", "$updatedAt", "$createdAt"].includes(field.key)) {
-          return false;
-        }
-        return field;
-      }}
-    />
-  );
+  return <MuiEditInferencer />;
 }
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
