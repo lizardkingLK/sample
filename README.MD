@@ -15,6 +15,15 @@ This [refine](https://github.com/pankod/refine) project was generated with [supe
 
 Refine offers lots of out-of-the box functionality for rapid development, without compromising extreme customizability. Use-cases include, but are not limited to admin panels, B2B applications and dashboards.
 
+## How to run locally
+
+To run locally clone the repo and add environment variables below in your .env.local file.
+
+```
+NEXT_PUBLIC_SUPABASE_URL=YOUR_NEXT_PUBLIC_SUPABASE_URL
+NEXT_PUBLIC_SUPABASE_KEY=YOUR_NEXT_PUBLIC_SUPABASE_KEY
+```
+
 ## Available Scripts
 
 ### Running the development server.
