@@ -4,14 +4,14 @@ import { authProvider } from "src/authProvider";
 import { DataGrid } from "@mui/x-data-grid";
 import { useDataGrid } from "@refinedev/mui";
 
-export interface IBlog {
+export interface IGroup {
   id: string;
   created_at: string;
-  title: string;
+  name: string;
 }
 
 const PostList: React.FC = () => {
-  const { dataGridProps } = useDataGrid<IBlog>({
+  const { dataGridProps } = useDataGrid<IGroup>({
     sorters: {
       initial: [
         {
@@ -21,13 +21,13 @@ const PostList: React.FC = () => {
       ],
     },
     meta: {
-      select: "id, created_at, title",
+      select: "id, created_at, name",
     },
   });
 
   return (
     <DataGrid
-      columns={[{ field: "id", headerName: "#" }, { field: "title", headerName: "Title", width: 300 }]}
+      columns={[{ field: "id", headerName: "#" }, { field: "name", headerName: "Name", width: 300 }]}
       {...dataGridProps}
     />
   );

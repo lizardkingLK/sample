@@ -1,7 +1,5 @@
 import { NavigateToResource } from "@refinedev/nextjs-router";
 
 export default function Home() {
-  return <NavigateToResource resource="blogs" />;
+  return <NavigateToResource resource="groups" />;
 }
-
-Home.noLayout = true;
