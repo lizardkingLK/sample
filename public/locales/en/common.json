@@ -15,7 +15,7 @@
       "buttons": {
         "submit": "Login",
         "forgotPassword": "Forgot password?",
-        "noAccount": "Don’t have an account?",
+        "noAccount": "Don't have an account?",
         "rememberMe": "Remember me"
       }
     },
@@ -108,53 +108,29 @@
   "dashboard": {
     "title": "Dashboard"
   },
-  "blog_posts": {
-    "blog_posts": "Blog Posts",
+  "groups": {
+    "groups": "Groups",
     "fields": {
       "id": "Id",
-      "title": "Title",
-      "content": "Content",
-      "status": "Status",
       "created_at": "Created At",
-      "categoryId": "Category"
+      "name": "Name"
     },
     "titles": {
-      "create": "Create Blog Post",
-      "edit": "Edit Blog Post",
-      "list": "Blog Posts",
-      "show": "Show Blog Post"
-    }
-  },
-  "categories": {
-    "categories": "Categories",
-    "fields": {
-      "id": "Id",
-      "title": "Title",
-      "created_at": "Created At"
-    },
-    "titles": {
-      "create": "Create Category",
-      "edit": "Edit Category",
-      "list": "Categories",
-      "show": "Show Category"
+      "create": "Create Group",
+      "edit": "Edit Group",
+      "list": "Groups",
+      "show": "Show Group"
     }
   },
   "documentTitle": {
-    "default": "refine",
-    "suffix": " | refine",
-    "blog_posts": {
-      "list": "Blog Posts | refine",
-      "show": "#{{id}} Show Blog Post | refine",
-      "edit": "#{{id}} Edit Blog Post | refine",
-      "create": "Create new Blog Post | refine",
-      "clone": "#{{id}} Clone Blog Post | refine"
-    },
-    "categories": {
-      "list": "Categories | refine",
-      "show": "#{{id}} Show Category | refine",
-      "edit": "#{{id}} Edit Category | refine",
-      "create": "Create new Category | refine",
-      "clone": "#{{id}} Clone Category | refine"
+    "default": "Sample",
+    "suffix": " | Sample",
+    "groups": {
+      "list": "Groups | Sample",
+      "show": "#{{id}} Show Group | Sample",
+      "edit": "#{{id}} Edit Group | Sample",
+      "create": "Create new Group | Sample",
+      "clone": "#{{id}} Clone Group | Sample"
     }
   },
   "table": {

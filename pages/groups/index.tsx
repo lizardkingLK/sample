@@ -1,40 +1,72 @@
+import React from "react";
+import {
+  useDataGrid,
+  EditButton,
+  ShowButton,
+  DeleteButton,
+  List,
+  DateField,
+} from "@refinedev/mui";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { IResourceComponentsProps, useTranslate } from "@refinedev/core";
 import { GetServerSideProps } from "next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { authProvider } from "src/authProvider";
-import { DataGrid } from "@mui/x-data-grid";
-import { useDataGrid } from "@refinedev/mui";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
-export interface IGroup {
-  id: string;
-  created_at: string;
-  name: string;
-}
+const GroupList: React.FC<IResourceComponentsProps> = () => {
+  const translate = useTranslate();
+  const { dataGridProps } = useDataGrid();
 
-const PostList: React.FC = () => {
-  const { dataGridProps } = useDataGrid<IGroup>({
-    sorters: {
-      initial: [
-        {
-          field: "id",
-          order: "asc",
+  const columns = React.useMemo<GridColDef[]>(
+    () => [
+      {
+        field: "id",
+        headerName: translate("groups.fields.id"),
+        type: "number",
+        minWidth: 50,
+      },
+      {
+        field: "created_at",
+        flex: 1,
+        headerName: translate("groups.fields.created_at"),
+        minWidth: 250,
+        renderCell: function render({ value }) {
+          return <DateField value={value} />;
         },
-      ],
-    },
-    meta: {
-      select: "id, created_at, name",
-    },
-  });
+      },
+      {
+        field: "name",
+        flex: 1,
+        headerName: translate("groups.fields.name"),
+        minWidth: 200,
+      },
+      {
+        field: "actions",
+        headerName: translate("table.actions"),
+        sortable: false,
+        renderCell: function render({ row }) {
+          return (
+            <>
+              <EditButton hideText recordItemId={row.id} />
+              <ShowButton hideText recordItemId={row.id} />
+              <DeleteButton hideText recordItemId={row.id} />
+            </>
+          );
+        },
+        align: "center",
+        headerAlign: "center",
+        minWidth: 80,
+      },
+    ],
+    [translate],
+  );
 
   return (
-    <DataGrid
-      columns={[{ field: "id", headerName: "#" }, { field: "name", headerName: "Name", width: 300 }]}
-      {...dataGridProps}
-    />
+    <List>
+      <DataGrid {...dataGridProps} columns={columns} autoHeight />
+    </List>
   );
 };
-
-export default PostList;
-
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const { authenticated, redirectTo } = await authProvider.check(context);
@@ -49,7 +81,7 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
         ...translateProps,
       },
       redirect: {
-        destination: `${redirectTo}?to=${encodeURIComponent("/blogs")}`,
+        destination: `${redirectTo}?to=${encodeURIComponent("/groups")}`,
         permanent: false,
       },
     };
@@ -61,3 +93,5 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
     },
   };
 };
+
+export default GroupList;

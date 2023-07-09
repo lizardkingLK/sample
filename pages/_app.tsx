@@ -78,6 +78,9 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
                 {
                   name: "groups",
                   list: "/groups",
+                  create: "/groups/create",
+                  edit: "/groups/edit/:id",
+                  show: "/groups/show/:id",
                   meta: {
                     canDelete: true,
                   },
