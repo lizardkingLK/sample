@@ -12,7 +12,6 @@ import routerProvider, {
 } from "@refinedev/nextjs-router";
 import type { NextPage } from "next";
 import { AppProps } from "next/app";
-
 import { Header } from "@components/header";
 import { ColorModeContextProvider } from "@contexts";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -22,6 +21,7 @@ import { authProvider } from "src/authProvider";
 import { AppIcon } from "src/components/app-icon";
 import { dataProvider } from "src/providers/supabase";
 import { supabaseClient } from "src/utility";
+import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   noLayout?: boolean;
@@ -76,13 +76,14 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
               i18nProvider={i18nProvider}
               resources={[
                 {
-                  name: "groups",
-                  list: "/groups",
-                  create: "/groups/create",
-                  edit: "/groups/edit/:id",
-                  show: "/groups/show/:id",
+                  name: "expenses",
+                  list: "/expenses",
+                  create: "/expenses/create",
+                  edit: "/expenses/edit/:id",
+                  show: "/expenses/show/:id",
                   meta: {
                     canDelete: true,
+                    icon: <RequestQuoteIcon />
                   },
                 },
               ]}

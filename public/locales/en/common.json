@@ -108,29 +108,32 @@
   "dashboard": {
     "title": "Dashboard"
   },
-  "groups": {
-    "groups": "Groups",
+  "expenses": {
+    "expenses": "Expenses",
     "fields": {
       "id": "Id",
       "created_at": "Created At",
-      "name": "Name"
+      "status": "Status",
+      "type": "Type",
+      "description": "Description",
+      "amount": "Amount"
     },
     "titles": {
-      "create": "Create Group",
-      "edit": "Edit Group",
-      "list": "Groups",
-      "show": "Show Group"
+      "create": "Add Record",
+      "edit": "Edit Record",
+      "list": "Expenses",
+      "show": "Show Record"
     }
   },
   "documentTitle": {
     "default": "Sample",
     "suffix": " | Sample",
-    "groups": {
-      "list": "Groups | Sample",
-      "show": "#{{id}} Show Group | Sample",
-      "edit": "#{{id}} Edit Group | Sample",
-      "create": "Create new Group | Sample",
-      "clone": "#{{id}} Clone Group | Sample"
+    "expenses": {
+      "list": "Expenses | Sample",
+      "show": "#{{id}} Show Expense | Sample",
+      "edit": "#{{id}} Edit Expense | Sample",
+      "create": "Create new Expense | Sample",
+      "clone": "#{{id}} Clone Expense | Sample"
     }
   },
   "table": {
