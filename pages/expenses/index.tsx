@@ -1,7 +1,7 @@
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { authProvider } from "src/authProvider";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   useDataGrid,
   EditButton,
@@ -16,6 +16,8 @@ import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { ExpenseTypes } from "src/interfaces/common";
 import { Box, Grid, Typography } from "@mui/material";
+import LinearDeterminate from "@components/progress/linear";
+import { getAmountFormatted, getProgress } from "src/utility/helper";
 
 const ExpenseList: React.FC<any> = (props) => {
   const translate = useTranslate();
@@ -27,20 +29,12 @@ const ExpenseList: React.FC<any> = (props) => {
           operator: "eq",
           value: props.email,
         },
-
       ],
     },
   });
-  const [query, setQuery] = useState(null);
 
   const columns = React.useMemo<GridColDef[]>(
     () => [
-      {
-        field: "id",
-        headerName: translate("expenses.fields.id"),
-        type: "number",
-        minWidth: 50,
-      },
       {
         field: "description",
         flex: 1,
@@ -109,6 +103,10 @@ const ExpenseList: React.FC<any> = (props) => {
     [translate]
   );
 
+  const [rows, setRows] = useState<any>(null);
+
+  useEffect(() => setRows(dataGridProps.rows), [dataGridProps]);
+
   return (
     <List>
       <Typography variant="h6" sx={{ mb: 2 }}>
@@ -122,30 +120,21 @@ const ExpenseList: React.FC<any> = (props) => {
         <Grid item xs={6}>
           <Typography variant="h3">
             <ArrowDropUpIcon fontSize="large" color="success" />{" "}
-            {dataGridProps.rows && dataGridProps.rows.length > 0
-              ? new Intl.NumberFormat().format(
-                  dataGridProps.rows
-                    .filter((x) => x.type === "Earning")
-                    .map((x) => x.amount)
-                    .reduce((x1, x2) => x1 + x2, 0)
-                    .toFixed(2)
-                )
+            {rows && rows.length > 0
+              ? getAmountFormatted(rows, ExpenseTypes.Earning)
               : "0.00"}
           </Typography>
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={6} sx={{ display: "flex", justifyContent: "flex-end" }}>
           <Typography variant="h3">
             <ArrowDropDownIcon fontSize="large" color="error" />{" "}
-            {dataGridProps.rows && dataGridProps.rows.length > 0
-              ? new Intl.NumberFormat().format(
-                  dataGridProps.rows
-                    .filter((x) => x.type === "Expense")
-                    .map((x) => x.amount)
-                    .reduce((x1, x2) => x1 + x2, 0)
-                    .toFixed(2)
-                )
+            {rows && rows.length > 0
+              ? getAmountFormatted(rows, ExpenseTypes.Expense)
               : "0.00"}
           </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <LinearDeterminate progress={rows && getProgress(rows, ExpenseTypes.Earning)} />
         </Grid>
       </Grid>
     </List>

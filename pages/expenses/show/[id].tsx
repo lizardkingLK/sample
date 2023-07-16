@@ -12,7 +12,7 @@ import {
   DateField,
   TextFieldComponent as TextField,
 } from "@refinedev/mui";
-import { Typography, Stack, Box, Grid } from "@mui/material";
+import {  Stack, Box, Grid } from "@mui/material";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { ExpenseTypes } from "src/interfaces/common";
@@ -27,18 +27,8 @@ const ExpenseShow: React.FC<IResourceComponentsProps> = () => {
     <Show isLoading={isLoading}>
       <Stack gap={1}>
         <Grid container spacing={2}>
-          <Grid item xs={1}>
-            {record?.id && (
-              <Box
-                sx={{ display: "flex", alignItems: "center" }}
-                title={translate("expenses.fields.id")}
-              >
-                <NumberField variant="h6" value={record.id} />
-              </Box>
-            )}
-          </Grid>
-          <Grid item xs={4}>
-              <TextField value={record?.description} />
+          <Grid item xs={6}>
+            <TextField value={record?.description} variant="h5" />
             {record?.created_at && (
               <Box
                 sx={{ display: "flex", flexDirection: "column" }}
@@ -48,11 +38,13 @@ const ExpenseShow: React.FC<IResourceComponentsProps> = () => {
                   format="LLL"
                   variant="body1"
                   value={record?.created_at}
+                  color={"lightgray"}
+                  fontStyle={"italic"}
                 />
               </Box>
             )}
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={6}>
             {record?.amount && (
               <Box
                 sx={{ display: "flex" }}

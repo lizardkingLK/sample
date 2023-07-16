@@ -3,7 +3,7 @@ export enum ExpenseTypes {
   Expense = "Expense",
 }
 
-export interface IExpense {
-  id: number;
-  description: string;
+export interface ISummary {
+  earnings: string | undefined,
+  expenses: string | undefined,
 }

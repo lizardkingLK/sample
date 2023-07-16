@@ -48,7 +48,8 @@ export const ExpenseEdit: React.FC<any> = (props) => {
         sx={{ display: "flex", flexDirection: "column" }}
         autoComplete="off"
       >
-        <TextField
+        <FormControl sx={{ display: "none" }}>
+          <TextField
           {...register("id", {
             required: "This field is required",
             valueAsNumber: true,
@@ -62,7 +63,8 @@ export const ExpenseEdit: React.FC<any> = (props) => {
           label={translate("expenses.fields.id")}
           name="id"
           disabled
-        />
+          />
+          </FormControl>
         <TextField
           {...register("description", {
             required: "This field is required",
