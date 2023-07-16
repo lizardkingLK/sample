@@ -11,23 +11,26 @@ import {
   DateField,
 } from "@refinedev/mui";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { IResourceComponentsProps, useTranslate } from "@refinedev/core";
+import { useTranslate } from "@refinedev/core";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { ExpenseTypes } from "src/interfaces/common";
-import {
-  Accordion,
-  AccordionSummary,
-  Box,
-  Grid,
-  Typography,
-} from "@mui/material";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { Box, Grid, Typography } from "@mui/material";
 
-const ExpenseList: React.FC<IResourceComponentsProps> = () => {
+const ExpenseList: React.FC<any> = (props) => {
   const translate = useTranslate();
-  const { dataGridProps } = useDataGrid();
+  const { dataGridProps } = useDataGrid({
+    filters: {
+      permanent: [
+        {
+          field: "email",
+          operator: "eq",
+          value: props.email,
+        },
+
+      ],
+    },
+  });
   const [query, setQuery] = useState(null);
 
   const columns = React.useMemo<GridColDef[]>(
@@ -112,45 +115,39 @@ const ExpenseList: React.FC<IResourceComponentsProps> = () => {
         Manager
       </Typography>
       <DataGrid {...dataGridProps} columns={columns} autoHeight />
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <Typography variant="h6">Trends</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <Typography variant="h3">
-                <ArrowDropUpIcon fontSize="large" color="success" />{" "}
-                {dataGridProps.rows && dataGridProps.rows.length > 0
-                  ? new Intl.NumberFormat().format(dataGridProps.rows
+      <Typography variant="h6" sx={{ mb: 2 }}>
+        Summary
+      </Typography>
+      <Grid container spacing={2}>
+        <Grid item xs={6}>
+          <Typography variant="h3">
+            <ArrowDropUpIcon fontSize="large" color="success" />{" "}
+            {dataGridProps.rows && dataGridProps.rows.length > 0
+              ? new Intl.NumberFormat().format(
+                  dataGridProps.rows
                     .filter((x) => x.type === "Earning")
                     .map((x) => x.amount)
                     .reduce((x1, x2) => x1 + x2, 0)
-                    .toFixed(2))
-                  : "0.00"}
-              </Typography>
-            </Grid>
-            <Grid item xs={6}>
-              <Typography variant="h3">
-                <ArrowDropDownIcon fontSize="large" color="error" />{" "}
-                {dataGridProps.rows && dataGridProps.rows.length > 0
-                  ? new Intl.NumberFormat().format(
-                      dataGridProps.rows
-                        .filter((x) => x.type === "Expense")
-                        .map((x) => x.amount)
-                        .reduce((x1, x2) => x1 + x2, 0)
-                        .toFixed(2)
-                    )
-                  : "0.00"}
-              </Typography>
-            </Grid>
-          </Grid>
-        </AccordionDetails>
-      </Accordion>
+                    .toFixed(2)
+                )
+              : "0.00"}
+          </Typography>
+        </Grid>
+        <Grid item xs={6}>
+          <Typography variant="h3">
+            <ArrowDropDownIcon fontSize="large" color="error" />{" "}
+            {dataGridProps.rows && dataGridProps.rows.length > 0
+              ? new Intl.NumberFormat().format(
+                  dataGridProps.rows
+                    .filter((x) => x.type === "Expense")
+                    .map((x) => x.amount)
+                    .reduce((x1, x2) => x1 + x2, 0)
+                    .toFixed(2)
+                )
+              : "0.00"}
+          </Typography>
+        </Grid>
+      </Grid>
     </List>
   );
 };
@@ -174,9 +171,13 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
     };
   }
 
+  const identity: any =
+    authProvider.getIdentity && (await authProvider.getIdentity(context));
+
   return {
     props: {
       ...translateProps,
+      email: identity.email,
     },
   };
 };

@@ -114,8 +114,9 @@ export const authProvider: AuthBindings = {
 
     return null;
   },
-  getIdentity: async () => {
-    const { data } = await supabaseClient.auth.getUser();
+  getIdentity: async (ctx) => {
+    const { token } = nookies.get(ctx);
+    const { data } = await supabaseClient.auth.getUser(token);
 
     if (data?.user) {
       return {

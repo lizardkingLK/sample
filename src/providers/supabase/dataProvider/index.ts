@@ -11,7 +11,7 @@ export const dataProvider = (
 
       const query = supabaseClient.from(resource).select(meta?.select ?? "*", {
         count: "exact",
-      });      
+      });
 
       if (mode === "server") {
         query.range((current - 1) * pageSize, current * pageSize - 1);
