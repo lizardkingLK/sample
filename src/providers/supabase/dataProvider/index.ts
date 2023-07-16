@@ -222,7 +222,7 @@ export const dataProvider = (
     },
 
     getApiUrl: () => {
-      throw Error("Not implemented on refine-supabase data provider.");
+      return process.env.NEXT_PUBLIC_SUPABASE_URL!;
     },
 
     custom: () => {

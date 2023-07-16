@@ -1,7 +1,7 @@
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { authProvider } from "src/authProvider";
-import React from "react";
+import React, { useState } from "react";
 import {
   useDataGrid,
   EditButton,
@@ -12,14 +12,23 @@ import {
 } from "@refinedev/mui";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { IResourceComponentsProps, useTranslate } from "@refinedev/core";
-import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { ExpenseTypes } from "src/interfaces/common";
-import { Box } from "@mui/material";
+import {
+  Accordion,
+  AccordionSummary,
+  Box,
+  Grid,
+  Typography,
+} from "@mui/material";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const ExpenseList: React.FC<IResourceComponentsProps> = () => {
   const translate = useTranslate();
   const { dataGridProps } = useDataGrid();
+  const [query, setQuery] = useState(null);
 
   const columns = React.useMemo<GridColDef[]>(
     () => [
@@ -94,12 +103,54 @@ const ExpenseList: React.FC<IResourceComponentsProps> = () => {
         minWidth: 80,
       },
     ],
-    [translate],
+    [translate]
   );
 
   return (
     <List>
+      <Typography variant="h6" sx={{ mb: 2 }}>
+        Manager
+      </Typography>
       <DataGrid {...dataGridProps} columns={columns} autoHeight />
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography variant="h6">Trends</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <Typography variant="h3">
+                <ArrowDropUpIcon fontSize="large" color="success" />{" "}
+                {dataGridProps.rows && dataGridProps.rows.length > 0
+                  ? new Intl.NumberFormat().format(dataGridProps.rows
+                    .filter((x) => x.type === "Earning")
+                    .map((x) => x.amount)
+                    .reduce((x1, x2) => x1 + x2, 0)
+                    .toFixed(2))
+                  : "0.00"}
+              </Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography variant="h3">
+                <ArrowDropDownIcon fontSize="large" color="error" />{" "}
+                {dataGridProps.rows && dataGridProps.rows.length > 0
+                  ? new Intl.NumberFormat().format(
+                      dataGridProps.rows
+                        .filter((x) => x.type === "Expense")
+                        .map((x) => x.amount)
+                        .reduce((x1, x2) => x1 + x2, 0)
+                        .toFixed(2)
+                    )
+                  : "0.00"}
+              </Typography>
+            </Grid>
+          </Grid>
+        </AccordionDetails>
+      </Accordion>
     </List>
   );
 };

@@ -21,7 +21,8 @@ import { authProvider } from "src/authProvider";
 import { AppIcon } from "src/components/app-icon";
 import { dataProvider } from "src/providers/supabase";
 import { supabaseClient } from "src/utility";
-import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
+import RequestQuoteIcon from "@mui/icons-material/RequestQuote";
+import FilterListIcon from "@mui/icons-material/FilterList";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   noLayout?: boolean;
@@ -83,7 +84,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
                   show: "/expenses/show/:id",
                   meta: {
                     canDelete: true,
-                    icon: <RequestQuoteIcon />
+                    icon: <RequestQuoteIcon />,
                   },
                 },
               ]}

@@ -1,17 +1,12 @@
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { authProvider } from "src/authProvider";
-
 import { Edit } from "@refinedev/mui";
-import { Box, FormControl, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
+import { Box, FormControl, InputAdornment, InputLabel, MenuItem, OutlinedInput, Select, SelectChangeEvent, TextField } from "@mui/material";
 import { useForm } from "@refinedev/react-hook-form";
 import { IResourceComponentsProps, useTranslate } from "@refinedev/core";
-
-// import { MuiEditInferencer } from "@refinedev/inferencer/mui";
-
-// export default function BlogPostEdit() {
-//     return <MuiEditInferencer />;
-// }
+import { useEffect, useState } from "react";
+import { ExpenseTypes } from "src/interfaces/common";
 
 export const ExpenseEdit: React.FC<IResourceComponentsProps> = () => {
     const translate = useTranslate();
@@ -22,8 +17,13 @@ export const ExpenseEdit: React.FC<IResourceComponentsProps> = () => {
         control,
         formState: { errors },
     } = useForm();
-
     const expensesData = queryResult?.data?.data;
+    
+    const [type, setType] = useState<string>(expensesData?.type);
+
+    const handleChange = (event: SelectChangeEvent) => {
+        setType(event.target.value as string);
+    };
 
     return (
         <Edit saveButtonProps={saveButtonProps}>
@@ -60,32 +60,22 @@ export const ExpenseEdit: React.FC<IResourceComponentsProps> = () => {
                     label={translate("expenses.fields.description")}
                     name="description"
                 />
-                <TextField
-                    {...register("status", {
-                        required: "This field is required",
-                    })}
-                    error={!!(errors as any)?.status}
-                    helperText={(errors as any)?.status?.message}
-                    margin="normal"
-                    fullWidth
-                    InputLabelProps={{ shrink: true }}
-                    type="text"
-                    label={translate("expenses.fields.status")}
-                    name="status"
-                />
-                <TextField
-                    {...register("type", {
-                        required: "This field is required",
-                    })}
-                    error={!!(errors as any)?.type}
-                    helperText={(errors as any)?.type?.message}
-                    margin="normal"
-                    fullWidth
-                    InputLabelProps={{ shrink: true }}
-                    type="text"
-                    label={translate("expenses.fields.type")}
-                    name="type"
-                />
+                <FormControl fullWidth sx={{ mt: 2 }}>
+                    <InputLabel id="expense-type-input">Type</InputLabel>
+                    <Select
+                        {...register("type", {
+                            required: "This field is required",
+                        })}
+                        labelId="expense-type-input"
+                        id="expense-type-input-element"
+                        value={type}
+                        label="Type"
+                        onChange={handleChange}
+                    >
+                        <MenuItem value={ExpenseTypes.Earning}>{ExpenseTypes.Earning}</MenuItem>
+                        <MenuItem value={ExpenseTypes.Expense}>{ExpenseTypes.Expense}</MenuItem>
+                    </Select>
+                </FormControl>
                 <FormControl fullWidth sx={{ mt: 2 }}>
                     <InputLabel htmlFor="outlined-adornment-amount">Amount</InputLabel>
                     <OutlinedInput
