@@ -15,7 +15,7 @@ import { useTranslate } from "@refinedev/core";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { ExpenseTypes } from "src/interfaces/common";
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Grid, Skeleton, Typography } from "@mui/material";
 import LinearDeterminate from "@components/progress/linear";
 import { getAmountFormatted, getProgress } from "src/utility/helper";
 
@@ -116,27 +116,39 @@ const ExpenseList: React.FC<any> = (props) => {
       <Typography variant="h6" sx={{ mb: 2 }}>
         Summary
       </Typography>
-      <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <Typography variant="h3">
-            <ArrowDropUpIcon fontSize="large" color="success" />{" "}
-            {rows && rows.length > 0
-              ? getAmountFormatted(rows, ExpenseTypes.Earning)
-              : "0.00"}
-          </Typography>
-        </Grid>
-        <Grid item xs={6} sx={{ display: "flex", justifyContent: "flex-end" }}>
-          <Typography variant="h3">
-            <ArrowDropDownIcon fontSize="large" color="error" />{" "}
-            {rows && rows.length > 0
-              ? getAmountFormatted(rows, ExpenseTypes.Expense)
-              : "0.00"}
-          </Typography>
-        </Grid>
-        <Grid item xs={12}>
-          <LinearDeterminate progress={rows && getProgress(rows, ExpenseTypes.Earning)} />
-        </Grid>
-      </Grid>
+      {rows && rows.length > 0 ? (
+        <Box>
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <Typography variant="h3">
+                <ArrowDropUpIcon fontSize="large" color="success" />{" "}
+                  {getAmountFormatted(rows, ExpenseTypes.Earning)}
+              </Typography>
+            </Grid>
+            <Grid
+              item
+              xs={6}
+              sx={{ display: "flex", justifyContent: "flex-end" }}
+            >
+              <Typography variant="h3">
+                <ArrowDropDownIcon fontSize="large" color="error" />{" "}
+                  {getAmountFormatted(rows, ExpenseTypes.Expense)}
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <LinearDeterminate
+                progress={rows && getProgress(rows, ExpenseTypes.Earning)}
+              />
+            </Grid>
+          </Grid>
+        </Box>
+      ) : (
+        <div style={{ width: "100%" }}>
+          <Skeleton />
+          <Skeleton animation="wave" />
+          <Skeleton animation="pulse" />
+        </div>
+      )}
     </List>
   );
 };
