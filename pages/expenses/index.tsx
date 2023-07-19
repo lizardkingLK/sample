@@ -1,7 +1,7 @@
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { authProvider } from "src/authProvider";
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import {
   useDataGrid,
   EditButton,
@@ -15,9 +15,21 @@ import { useTranslate } from "@refinedev/core";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { ExpenseTypes } from "src/interfaces/common";
-import { Box, Grid, Skeleton, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  Skeleton,
+  TextField,
+  TextFieldProps,
+  Typography,
+} from "@mui/material";
 import LinearDeterminate from "@components/progress/linear";
-import { getAmountFormatted, getProgress } from "src/utility/helper";
+import {
+  getAmountFormatted,
+  getCurrentDate,
+  getProgress,
+} from "src/utility/helper";
 
 const ExpenseList: React.FC<any> = (props) => {
   const translate = useTranslate();
@@ -46,6 +58,7 @@ const ExpenseList: React.FC<any> = (props) => {
         flex: 1,
         headerName: translate("expenses.fields.type"),
         minWidth: 200,
+        filterable: false,
       },
       {
         field: " ",
@@ -74,6 +87,7 @@ const ExpenseList: React.FC<any> = (props) => {
         renderCell: function render({ value }) {
           return <DateField value={value} />;
         },
+        filterable: false,
       },
       {
         field: "amount",
@@ -98,14 +112,43 @@ const ExpenseList: React.FC<any> = (props) => {
         align: "center",
         headerAlign: "center",
         minWidth: 80,
+        filterable: false,
       },
     ],
     [translate]
   );
 
   const [rows, setRows] = useState<any>(null);
+  const [start, setStart] = useState<any>(null);
+  const [end, setEnd] = useState<any>(null);
+  const [filtered, setFiltered] = useState<any>(null);
 
   useEffect(() => setRows(dataGridProps.rows), [dataGridProps]);
+  useEffect(() => setFiltered(dataGridProps.rows), [rows]);
+
+  const handleChange = (e: { target: { value: any; name: string } }) => {
+    let value = e.target.value;
+    if (e.target.name === "start") {
+      setStart(new Date(value));
+    } else if (e.target.name === "end") {
+      setEnd(new Date(value));
+    }
+  };
+
+  const handleFilter = () => {
+    if (rows && rows.length > 0 && start && end) {
+      const fd = rows.filter(
+        (r: { created_at: string | number | Date }) =>
+          new Date(r.created_at) >= start && new Date(r.created_at) <= end
+      );
+      console.log(fd);
+      setFiltered(fd);
+    }
+  };
+
+  const handleClear = () => {
+    setFiltered(rows);
+  };
 
   return (
     <List>
@@ -116,13 +159,13 @@ const ExpenseList: React.FC<any> = (props) => {
       <Typography variant="h6" sx={{ mb: 2 }}>
         Summary
       </Typography>
-      {rows && rows.length > 0 ? (
+      {filtered && filtered.length > 0 ? (
         <Box>
           <Grid container spacing={2}>
             <Grid item xs={6}>
               <Typography variant="h3">
                 <ArrowDropUpIcon fontSize="large" color="success" />{" "}
-                  {getAmountFormatted(rows, ExpenseTypes.Earning)}
+                {getAmountFormatted(filtered, ExpenseTypes.Earning)}
               </Typography>
             </Grid>
             <Grid
@@ -132,12 +175,14 @@ const ExpenseList: React.FC<any> = (props) => {
             >
               <Typography variant="h3">
                 <ArrowDropDownIcon fontSize="large" color="error" />{" "}
-                  {getAmountFormatted(rows, ExpenseTypes.Expense)}
+                {getAmountFormatted(filtered, ExpenseTypes.Expense)}
               </Typography>
             </Grid>
             <Grid item xs={12}>
               <LinearDeterminate
-                progress={rows && getProgress(rows, ExpenseTypes.Earning)}
+                progress={
+                  filtered && getProgress(filtered, ExpenseTypes.Earning)
+                }
               />
             </Grid>
           </Grid>
@@ -149,6 +194,37 @@ const ExpenseList: React.FC<any> = (props) => {
           <Skeleton animation="pulse" />
         </div>
       )}
+      <Grid container spacing={2}>
+        <Grid item xs={12} my={4}>
+          <Typography variant="button">Filter</Typography>
+        </Grid>
+        <Grid item xs={4}>
+          <TextField
+            size="small"
+            placeholder={`Enter Start Date. i.e: ${getCurrentDate()}`}
+            fullWidth
+            name="start"
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid item xs={4}>
+          <TextField
+            size="small"
+            placeholder={`Enter End Date. i.e: ${getCurrentDate()}`}
+            fullWidth
+            name="end"
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid item xs={4}>
+          <Button color="success" onClick={handleFilter}>
+            GO
+          </Button>
+          <Button color="warning" onClick={handleClear}>
+            Clear
+          </Button>
+        </Grid>
+      </Grid>
     </List>
   );
 };

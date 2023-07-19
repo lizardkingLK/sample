@@ -1,11 +1,9 @@
 import { AuthPage, ThemedTitleV2 } from "@refinedev/mui";
-
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-
 import { authProvider } from "src/authProvider";
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 
-import { AppIcon } from "src/components/app-icon";
 export default function Login() {
   return (
     <AuthPage
@@ -17,7 +15,7 @@ export default function Login() {
         },
       }}
       title={
-        <ThemedTitleV2 collapsed={false} text="Sample" icon={<AppIcon />} />
+        <ThemedTitleV2 collapsed={false} text="Sample" icon={<AttachMoneyIcon />} />
       }
     />
   );

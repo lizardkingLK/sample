@@ -1,18 +1,15 @@
 import { AuthPage, ThemedTitleV2 } from "@refinedev/mui";
-
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-
 import { authProvider } from "src/authProvider";
-
-import { AppIcon } from "src/components/app-icon";
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 
 export default function ForgotPassword() {
   return (
     <AuthPage
       type="forgotPassword"
       title={
-        <ThemedTitleV2 collapsed={false} text="Sample" icon={<AppIcon />} />
+        <ThemedTitleV2 collapsed={false} text="Sample" icon={<AttachMoneyIcon />} />
       }
     />
   );

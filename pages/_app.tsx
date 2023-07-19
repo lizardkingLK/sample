@@ -18,11 +18,10 @@ import CssBaseline from "@mui/material/CssBaseline";
 import GlobalStyles from "@mui/material/GlobalStyles";
 import { appWithTranslation, useTranslation } from "next-i18next";
 import { authProvider } from "src/authProvider";
-import { AppIcon } from "src/components/app-icon";
 import { dataProvider } from "src/providers/supabase";
 import { supabaseClient } from "src/utility";
 import RequestQuoteIcon from "@mui/icons-material/RequestQuote";
-import FilterListIcon from "@mui/icons-material/FilterList";
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   noLayout?: boolean;
@@ -45,7 +44,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
           <ThemedTitleV2
             collapsed={collapsed}
             text="Sample"
-            icon={<AppIcon />}
+            icon={<AttachMoneyIcon />}
           />
         )}
       >
